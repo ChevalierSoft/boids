@@ -111,6 +111,7 @@ class Boid
 		this.acceleration.add(alignement);
 		this.acceleration.add(cohe);
 		this.acceleration.add(separation);
+
 	}
 
 	update()
@@ -126,4 +127,11 @@ class Boid
 		stroke(255);
 		point(this.position.x, this.position.y);
 	}
+
+	// mouseClicked()
+	// {
+	// 	let	mouse = dist(this.position.x, this.position.y, mouseX, mouseY);	
+	// 	this.acceleration.add(mouse);
+	// 	rect(100, 100, 100, 100);
+	// }
 }
