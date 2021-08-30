@@ -1,19 +1,18 @@
-const g_flock = [];
-
+let g_flock = [];
 
 function setup()
 {
-	let nb_elem_init = 200;
+	let nb_elem_at_startup = 1;
 
 	createCanvas(950, 950);
-	for (let i = 0; i < nb_elem_init; ++i)
+	for (let i = 0; i < nb_elem_at_startup; ++i)
 		g_flock.push(new Boid());
 }
 
-
 function draw()
 {
-	background(51, 51, 51, 40);
+	// background(51, 51, 51, 40);
+	background(51);
 
 	for (let boid of g_flock)
 	{
