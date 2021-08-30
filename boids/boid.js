@@ -9,6 +9,7 @@ class Boid
 		this.maxSpeed = 6.0;
 		this.perceptionRadius = 50;
 		this.size = 10;
+		this.color = [random(255), random(255), random(255)];
 	}
 
 	edges()
@@ -125,26 +126,30 @@ class Boid
 
 	show()
 	{
-		// landmark of the canvas ported to the entity
-		stroke(0, 0, 255);
-		line(this.position.x, this.position.y, this.position.x, this.position.y - 20);
-		line(this.position.x, this.position.y, this.position.x + 20, this.position.y);
-		
-		// normalised axis of the entity
-		stroke(0, 255, 0);
+		// setting up the normalised vector
 		let nv = createVector(this.velocity.x, this.velocity.y);
 		let dv = sqrt(this.velocity.x * this.velocity.x + this.velocity.y * this.velocity.y);
 		nv.x /= dv;
 		nv.y /= dv;
 		nv.x *= this.size;
 		nv.y *= this.size;
-		line(this.position.x - nv.x , this.position.y - nv.y,
-			this.position.x + nv.x , this.position.y + nv.y);
-		line(this.position.x - nv.y, this.position.y + nv.x,
-			this.position.x + nv.y , this.position.y - nv.x);
 
-		// red shape
-		stroke(255, 0, 0);
+		// // landmark of the canvas ported to the entity
+		// stroke(0, 0, 255);
+		// line(this.position.x, this.position.y, this.position.x, this.position.y - 20);
+		// line(this.position.x, this.position.y, this.position.x + 20, this.position.y);
+		
+		// // normalised axis of the entity
+		// stroke(0, 255, 0);
+		// line(this.position.x - nv.x , this.position.y - nv.y,
+		// 	this.position.x + nv.x , this.position.y + nv.y);
+		// line(this.position.x - nv.y, this.position.y + nv.x,
+		// 	this.position.x + nv.y , this.position.y - nv.x);
+
+		// final shape
+		stroke(this.color);
+		line(this.position.x, this.position.y,
+			this.position.x + nv.x, this.position.y + nv.y);
 		line(this.position.x - nv.x - nv.y , this.position.y - nv.y + nv.x,
 			this.position.x + nv.x, this.position.y + nv.y);
 		line(this.position.x + nv.x , this.position.y + nv.y,

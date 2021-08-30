@@ -11,8 +11,8 @@ function setup()
 
 function draw()
 {
-	// background(51, 51, 51, 40);
-	background(51);
+	background(0, 0, 0, 150);
+	// background(51, 51, 51);
 
 	for (let boid of g_flock)
 	{
