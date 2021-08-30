@@ -4,9 +4,9 @@ class Boid
 	{
 		this.position = createVector(random(width), random(height));
 		this.velocity = p5.Vector.random2D();
-		this.acceleration = createVector(2, 4);
-		this.maxForce = 0.21;
-		this.maxSpeed = 4.0;
+		this.acceleration = createVector(2, -4);
+		this.maxForce = 0.41;
+		this.maxSpeed = 6.0;
 		this.perceptionRadius = 50;
 	}
 
@@ -116,9 +116,10 @@ class Boid
 
 	update()
 	{
-		this.position.add(this.velocity);
+		this.acceleration.limit(this.maxForce);
 		this.velocity.add(this.acceleration);
 		this.velocity.limit(this.maxSpeed);
+		this.position.add(this.velocity);
 	}
 
 	show()
