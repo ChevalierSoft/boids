@@ -2,7 +2,7 @@ let g_flock = [];
 
 function setup()
 {
-	let nb_elem_at_startup = 1;
+	let nb_elem_at_startup = 200;
 
 	createCanvas(950, 950);
 	for (let i = 0; i < nb_elem_at_startup; ++i)
