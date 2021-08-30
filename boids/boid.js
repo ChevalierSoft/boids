@@ -129,10 +129,4 @@ class Boid
 		point(this.position.x, this.position.y);
 	}
 
-	// mouseClicked()
-	// {
-	// 	let	mouse = dist(this.position.x, this.position.y, mouseX, mouseY);	
-	// 	this.acceleration.add(mouse);
-	// 	rect(100, 100, 100, 100);
-	// }
 }

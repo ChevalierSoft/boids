@@ -1,9 +1,12 @@
 const g_flock = [];
 
+
 function setup()
 {
-	createCanvas(800, 900);
-	for (let i = 0; i < 200; ++i)
+	let nb_elem_init = 200;
+
+	createCanvas(950, 950);
+	for (let i = 0; i < nb_elem_init; ++i)
 		g_flock.push(new Boid());
 }
 
@@ -11,7 +14,7 @@ function setup()
 function draw()
 {
 	background(51, 51, 51, 40);
-	// background(51, 51, 51);
+
 	for (let boid of g_flock)
 	{
 		boid.edges();
@@ -23,35 +26,16 @@ function draw()
 
 function mouseDragged()
 {
-	let mouse = createVector(mouseX, mouseY);
-	// let wwh = createVector(width, height);
-
-	// mouse.div(wwh);
-	mouse.x /= width;
-	mouse.y /= height;
-	mouse.x -= 0.5;
-	mouse.y -= 0.5;
-
-	mouse.x *= 2;
-	mouse.y *= 2;
-	
-	fill(255, 0, 0);
-	text("vmouse : ", mouseX, mouseY);
-	text(mouse.x, mouseX + 50, mouseY);
-	text(mouse.y, mouseX + 80, mouseY);
-
 	for (let boid of g_flock)
 	{
-		// let	mouse = dist( mouseX, mouseY, Width / 2, Height /);
-		// mouse.setMag(boid.maxSpeed);
-		// mouse.sub(boid.velocity);
+		let bmouse = createVector(mouseX - boid.position.x, mouseY - boid.position.y);
+		boid.acceleration.add(bmouse);
+	}	
+}
 
-		boid.acceleration.add(mouse); //createVector(mouseX, mouseY);
-		
-	}
-	// rect(mouseX, mouseY, 100, 100);
-
-	// let tmp = new Boid();
-	// tmp.position = createVector(mouseX, mouseY);
-	// g_flock.push(tmp);
+function mousePressed()
+{
+	let tmp = new Boid();
+	tmp.position = createVector(mouseX, mouseY);
+	g_flock.push(tmp);
 }
