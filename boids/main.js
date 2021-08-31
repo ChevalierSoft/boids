@@ -36,6 +36,7 @@ function draw()
 		++i;
 	}
 	stroke(200);
+	fill(0);
 	text(g_flock.length, 100, 70);
 	text(g_projectiles.length, 100, 100);
 }

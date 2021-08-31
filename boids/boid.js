@@ -7,6 +7,7 @@ class Boid
 		this.acceleration = createVector(2, -4);
 		this.maxForce = 0.41;
 		this.maxSpeed = 6.0;
+		this.maxSpeedSeparation = 7.0;
 		this.perceptionRadius = 50;
 		this.fireRadius = 200;
 		this.size = 10;
@@ -100,7 +101,7 @@ class Boid
 		if (total > 0)
 		{
 			steering.div(total);
-			steering.setMag(this.maxSpeed);
+			steering.setMag(this.maxSpeedSeparation);
 			steering.sub(this.velocity);
 			steering.limit(this.maxForce);
 		}
@@ -150,8 +151,12 @@ class Boid
 		// 	this.position.x + nv.x , this.position.y + nv.y);
 		// line(this.position.x - nv.y, this.position.y + nv.x,
 		// 	this.position.x + nv.y , this.position.y - nv.x);
+		
+		// // fireRadius
+		// circle(this.position.x, this.position.y, this.fireRadius * 2);
 
 		// final shape
+		noFill();
 		stroke(this.color);
 		line(this.position.x, this.position.y,
 			this.position.x + nv.x, this.position.y + nv.y);
