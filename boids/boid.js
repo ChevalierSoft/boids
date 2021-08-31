@@ -8,8 +8,11 @@ class Boid
 		this.maxForce = 0.41;
 		this.maxSpeed = 6.0;
 		this.perceptionRadius = 50;
+		this.fireRadius = 200;
 		this.size = 10;
 		this.color = [random(255), random(255), random(255)];
+		this.cd = 0;
+		this.icd = 120;
 	}
 
 	edges()
@@ -134,6 +137,8 @@ class Boid
 		nv.x *= this.size;
 		nv.y *= this.size;
 
+		strokeWeight(1);
+
 		// // landmark of the canvas ported to the entity
 		// stroke(0, 0, 255);
 		// line(this.position.x, this.position.y, this.position.x, this.position.y - 20);
@@ -161,4 +166,58 @@ class Boid
 
 	}
 
+	fire(g_projectiles)
+	{
+		let d = dist(this.position.x, this.position.y, mouseX, mouseY);
+		if (d <= this.fireRadius && this.cd <= 0)
+		{
+			let tmp = new Projectile();
+
+			tmp.position.x = this.position.x;
+			tmp.position.y = this.position.y;
+			tmp.velocity.x = mouseX - this.position.x;
+			tmp.velocity.y = mouseY - this.position.y;
+			let dv = sqrt(tmp.velocity.x * tmp.velocity.x + tmp.velocity.y * tmp.velocity.y);
+			tmp.velocity.x /= dv;
+			tmp.velocity.y /= dv;
+			tmp.velocity.x *= tmp.speed;
+			tmp.velocity.y *= tmp.speed;
+			tmp.color = this.color;
+			g_projectiles.push(tmp);
+			this.cd = this.icd;
+		}
+		else if (this.cd > 0)
+			--this.cd;
+	}
+
+}
+
+Boid.id = 0;	// static variable
+
+class Projectile
+{
+	constructor()
+	{
+		this.position = createVector();
+		this.velocity = createVector();
+		this.lifetime = 120;
+		this.speed = 10;
+		this.color = [0, 0, 0];
+	}
+
+	update()
+	{
+		this.position.add(this.velocity);
+		if (this.lifetime <= 0)
+			delete this;
+		if (this.lifetime >= 0)
+			--this.lifetime;
+	}
+
+	show()
+	{
+		stroke(this.color);
+		strokeWeight(6);
+		point(this.position.x, this.position.y);
+	}
 }

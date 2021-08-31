@@ -1,26 +1,43 @@
 let g_flock = [];
+let g_projectiles = [];
 
 function setup()
 {
-	let nb_elem_at_startup = 200;
+	let nb_elem_at_startup = 0;
 
 	createCanvas(950, 950);
 	for (let i = 0; i < nb_elem_at_startup; ++i)
 		g_flock.push(new Boid());
+	background(50, 50, 50);
 }
 
 function draw()
 {
-	background(0, 0, 0, 150);
-	// background(51, 51, 51);
+	background(0, 0, 0, 10);
+	// background(0, 0, 0);
 
 	for (let boid of g_flock)
 	{
 		boid.edges();
 		boid.flock(g_flock);
 		boid.update();
+		boid.fire(g_projectiles);
 		boid.show();
 	}
+	let i = 0;
+	for (let fire of g_projectiles)
+	{
+		if (fire.lifetime <= 0)
+		{
+			g_projectiles.splice(i, 1);
+		}
+		fire.update();
+		fire.show();
+		++i;
+	}
+	stroke(200);
+	text(g_flock.length, 100, 70);
+	text(g_projectiles.length, 100, 100);
 }
 
 function mouseDragged()
