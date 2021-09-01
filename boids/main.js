@@ -7,14 +7,14 @@ function setup()
 
 	createCanvas(950, 950);
 	for (let i = 0; i < nb_elem_at_startup; ++i)
-		g_flock.push(new Boid());
+		g_flock.push(new Boid(random(width), random(height)));
 	background(50, 50, 50);
 }
 
 function draw()
 {
-	background(0, 0, 0, 10);
-	// background(0, 0, 0);
+	// background(0, 0, 0, 10);
+	background(0, 0, 0);
 
 	for (let boid of g_flock)
 	{
@@ -35,6 +35,7 @@ function draw()
 		fire.show();
 		++i;
 	}
+	// debug : counter of Boids and Projectiles
 	stroke(200);
 	fill(0);
 	text(g_flock.length, 100, 70);
@@ -52,7 +53,5 @@ function mouseDragged()
 
 function mousePressed()
 {
-	let tmp = new Boid();
-	tmp.position = createVector(mouseX, mouseY);
-	g_flock.push(tmp);
+	g_flock.push(new Boid(mouseX, mouseY));
 }

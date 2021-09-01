@@ -1,8 +1,8 @@
 class Boid
 {
-	constructor()
+	constructor(rw, rh)
 	{
-		this.position = createVector(random(width), random(height));
+		this.position = createVector(rw, rh);
 		this.velocity = p5.Vector.random2D();
 		this.acceleration = createVector(2, -4);
 		this.maxForce = 0.41;
@@ -176,18 +176,16 @@ class Boid
 		let d = dist(this.position.x, this.position.y, mouseX, mouseY);
 		if (d <= this.fireRadius && this.cd <= 0)
 		{
-			let tmp = new Projectile();
+			let tmp = new Projectile(this.position, this.color);
 
-			tmp.position.x = this.position.x;
-			tmp.position.y = this.position.y;
 			tmp.velocity.x = mouseX - this.position.x;
 			tmp.velocity.y = mouseY - this.position.y;
-			let dv = sqrt(tmp.velocity.x * tmp.velocity.x + tmp.velocity.y * tmp.velocity.y);
+			let dv = sqrt(tmp.velocity.x * tmp.velocity.x
+				+ tmp.velocity.y * tmp.velocity.y);
 			tmp.velocity.x /= dv;
 			tmp.velocity.y /= dv;
 			tmp.velocity.x *= tmp.speed;
 			tmp.velocity.y *= tmp.speed;
-			tmp.color = this.color;
 			g_projectiles.push(tmp);
 			this.cd = this.icd;
 		}
@@ -201,13 +199,13 @@ Boid.id = 0;	// static variable
 
 class Projectile
 {
-	constructor()
+	constructor(_pos, _color)
 	{
-		this.position = createVector();
+		this.position = createVector(_pos.x, _pos.y);
 		this.velocity = createVector();
 		this.lifetime = 120;
 		this.speed = 10;
-		this.color = [0, 0, 0];
+		this.color = _color;
 	}
 
 	update()
