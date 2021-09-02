@@ -10,10 +10,19 @@ class Rectangle
 
 	contains(p)
 	{
-		return ( p.position.x > this.x - this.w
-			&& p.position.x < this.x + this.w
-			&& p.position.y > this.y - this.h
-			&& p.position.y < this.y + this.h
+		return ( p.position.x >= this.x - this.w
+			&& p.position.x <= this.x + this.w
+			&& p.position.y >= this.y - this.h
+			&& p.position.y <= this.y + this.h
+			);
+	}
+
+	intersects(range)
+	{
+		return !(range.x - range.w > this.x + this.w
+			|| range.x + range.w < this.x - this.w
+			|| range.y - range.w > this.y + this.w
+			|| range.y + range.w < this.y - this.w
 			);
 	}
 }
@@ -65,13 +74,14 @@ class QuadTree
 	{
 		if (!this.boundary.contains(p))
 		{
-			console.log("oob");
-			return ;
+			// console.log("oob");
+			return false;
 		}
 
 		if (this.points.length < this.capacity)
 		{
 			this.points.push(p);
+			return (true);
 		}
 		else
 		{
@@ -79,16 +89,42 @@ class QuadTree
 			{
 				this.subdivide();
 			}
-			this.ne.insert(p);
-			this.nw.insert(p);
-			this.se.insert(p);
-			this.sw.insert(p);
+			if (this.ne.insert(p))
+				return (true);
+			else if (this.nw.insert(p))
+				return (true);
+			else if (this.se.insert(p))
+				return (true);
+			else if (this.sw.insert(p))
+				return (true);
 		}
+	}
+
+	query(range, found = [])
+	{
+		if (!this.boundary.intersects(range))
+			return found;
+		else
+		{
+			for (let p of this.points)
+				if (range.contains(p))
+					found.push(p);
+
+			if (this.divided)
+			{
+				this.nw.query(range, found);
+				this.ne.query(range, found);
+				this.sw.query(range, found);
+				this.sw.query(range, found);
+			}
+		}
+		return (found);
 	}
 
 	show()
 	{
 		stroke(255);
+		strokeWeight(1);
 		noFill();
 		rectMode(CENTER);
 		rect(this.boundary.x, this.boundary.y, this.boundary.w*2, this.boundary.h*2);
