@@ -24,4 +24,5 @@ class Projectile
 		strokeWeight(6);
 		point(this.position.x, this.position.y);
 	}
+
 }

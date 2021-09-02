@@ -1,9 +1,11 @@
 let g_flock = [];
 let g_projectiles = [];
 
+let deb = 0;
+
 function setup()
 {
-	let nb_elem_at_startup = 0;
+	let nb_elem_at_startup = 1000;
 
 	createCanvas(950, 950);
 	for (let i = 0; i < nb_elem_at_startup; ++i)
@@ -25,9 +27,12 @@ function draw()
 
 	for (let boid of g_flock)
 	{
+		let range = new Rectangle(boid.position.x, boid.position.y, boid.size, boid.size);
+		let inside_range = qt.query(range);
 		boid.edges();
-		boid.flock(g_flock);
-		// boid.update();
+		// boid.flock(g_flock);	// old
+		boid.flock(inside_range);
+		boid.update();
 		boid.fire(g_projectiles);
 		boid.show();
 	}
@@ -43,28 +48,12 @@ function draw()
 		++i;
 	}
 
-	// debug : counter of Boids and Projectiles
+	// counter of Boids and Projectiles
 	stroke(200);
 	strokeWeight(4);
 	fill(0);
 	text(g_flock.length, 100, 70);
 	text(g_projectiles.length, 100, 100);
-
-	// getting an array of boids in a range with the Quadtree
-	strokeWeight(1);
-	noFill();
-	stroke(0, 255, 0);
-	rectMode(CENTER);
-	let range = new Rectangle(width/2, height/2, 200, 200);
-	rect(range.x, range.y, range.w*2, range.h*2);
-
-	let inside_range = qt.query(range);
-	for (let p of inside_range)
-	{
-		stroke(200, 0, 0, 150);
-		rect(p.position.x, p.position.y, 30, 30);
-	}
-	text(inside_range.length, 190, 190);
 
 }
 
@@ -77,7 +66,7 @@ function mouseDragged()
 	}	
 }
 
-function mousePressed()
+function mouseClicked()
 {
 	g_flock.push(new Boid(mouseX, mouseY));
 }

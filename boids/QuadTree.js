@@ -10,20 +10,23 @@ class Rectangle
 
 	contains(p)
 	{
-		return ( p.position.x >= this.x - this.w
-			&& p.position.x <= this.x + this.w
-			&& p.position.y >= this.y - this.h
-			&& p.position.y <= this.y + this.h
+		return (
+			p.position.x >= this.x - this.w &&
+			p.position.x <= this.x + this.w &&
+			p.position.y >= this.y - this.h &&
+			p.position.y <= this.y + this.h
 			);
+
 	}
 
 	intersects(range)
 	{
-		return !(range.x - range.w > this.x + this.w
-			|| range.x + range.w < this.x - this.w
-			|| range.y - range.w > this.y + this.w
-			|| range.y + range.w < this.y - this.w
-			);
+		return !(
+			range.x - range.w > this.x + this.w ||
+			range.x + range.w < this.x - this.w ||
+			range.y - range.h > this.y + this.h ||
+			range.y + range.h < this.y - this.h
+		);
 	}
 }
 
@@ -39,31 +42,30 @@ class QuadTree
 
 	subdivide()
 	{
-		console.log("sub");
 		let tmp;
 	
-		tmp = new Rectangle(this.boundary.x - this.boundary.w/2,
-			this.boundary.y - this.boundary.h/2,
-			this.boundary.w/2,
-			this.boundary.h/2);
+		tmp = new Rectangle(this.boundary.x - this.boundary.w / 2,
+			this.boundary.y - this.boundary.h / 2,
+			this.boundary.w / 2,
+			this.boundary.h / 2);
 		this.nw = new QuadTree(tmp, this.capacity);
 
-		tmp = new Rectangle(this.boundary.x + this.boundary.w/2,
-			this.boundary.y - this.boundary.h/2,
-			this.boundary.w/2,
-			this.boundary.h/2);
+		tmp = new Rectangle(this.boundary.x + this.boundary.w / 2,
+			this.boundary.y - this.boundary.h / 2,
+			this.boundary.w / 2,
+			this.boundary.h / 2);
 		this.ne = new QuadTree(tmp, this.capacity);
 
-		tmp = new Rectangle(this.boundary.x - this.boundary.w/2,
-			this.boundary.y + this.boundary.h/2,
-			this.boundary.w/2,
-			this.boundary.h/2);
+		tmp = new Rectangle(this.boundary.x - this.boundary.w / 2,
+			this.boundary.y + this.boundary.h / 2,
+			this.boundary.w / 2,
+			this.boundary.h / 2);
 		this.sw = new QuadTree(tmp, this.capacity);
 
-		tmp = new Rectangle(this.boundary.x + this.boundary.w/2,
-			this.boundary.y + this.boundary.h/2,
-			this.boundary.w/2,
-			this.boundary.h/2);
+		tmp = new Rectangle(this.boundary.x + this.boundary.w / 2,
+			this.boundary.y + this.boundary.h / 2,
+			this.boundary.w / 2,
+			this.boundary.h / 2);
 		this.se = new QuadTree(tmp, this.capacity);
 
 		this.divided = true;
@@ -73,10 +75,7 @@ class QuadTree
 	insert(p)
 	{
 		if (!this.boundary.contains(p))
-		{
-			// console.log("oob");
 			return false;
-		}
 
 		if (this.points.length < this.capacity)
 		{
@@ -86,37 +85,33 @@ class QuadTree
 		else
 		{
 			if (this.divided == false)
-			{
 				this.subdivide();
-			}
-			if (this.ne.insert(p))
-				return (true);
-			else if (this.nw.insert(p))
-				return (true);
-			else if (this.se.insert(p))
-				return (true);
-			else if (this.sw.insert(p))
+			if (this.nw.insert(p) ||
+				this.ne.insert(p) ||
+				this.sw.insert(p) ||
+				this.se.insert(p))
 				return (true);
 		}
+		return (false);
 	}
 
 	query(range, found = [])
 	{
-		if (!this.boundary.intersects(range))
+		if (!range.intersects(this.boundary))
 			return found;
-		else
-		{
-			for (let p of this.points)
-				if (range.contains(p))
-					found.push(p);
 
-			if (this.divided)
-			{
-				this.nw.query(range, found);
-				this.ne.query(range, found);
-				this.sw.query(range, found);
-				this.sw.query(range, found);
-			}
+		for (let p of this.points)
+		{
+			if (range.contains(p))
+				found.push(p);
+		}
+
+		if (this.divided)
+		{
+			this.nw.query(range, found);
+			this.ne.query(range, found);
+			this.se.query(range, found);
+			this.sw.query(range, found);
 		}
 		return (found);
 	}

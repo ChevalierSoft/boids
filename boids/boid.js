@@ -193,6 +193,19 @@ class Boid
 			--this.cd;
 	}
 
+	intersects(other)
+	{
+		let d = dist(this.x, this.y, other.x, other.y);
+		return (d < this.size + other.size);
+	}
+
+	highLight()
+	{
+		rectMode(CENTER);
+		stroke(200, 0, 0, 150);
+		rect(this.position.x, this.position.y, 30, 30);
+	}
+
 }
 
 Boid.id = 0;	// static variable
