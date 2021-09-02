@@ -52,6 +52,7 @@ function draw()
 	stroke(200);
 	strokeWeight(4);
 	fill(0);
+	text(int(frameRate()), 100, 50);
 	text(g_flock.length, 100, 70);
 	text(g_projectiles.length, 100, 100);
 
