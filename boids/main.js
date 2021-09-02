@@ -3,11 +3,26 @@ let g_projectiles = [];
 
 function setup()
 {
-	let nb_elem_at_startup = 0;
+	let nb_elem_at_startup = 50;
 
 	createCanvas(950, 950);
 	for (let i = 0; i < nb_elem_at_startup; ++i)
 		g_flock.push(new Boid(random(width), random(height)));
+
+	// console.log(g_flock);
+
+	// let boundary = new Rectangle(width / 2, height/2, width/2, height/2);
+	// let qt = new QuadTree(boundary, 4);
+
+	// for (let p of g_flock)
+	// {
+	// 	qt.insert(p);
+	// }
+
+
+
+	// console.log(qt);
+
 	background(50, 50, 50);
 }
 
@@ -15,6 +30,12 @@ function draw()
 {
 	// background(0, 0, 0, 10);
 	background(0, 0, 0);
+
+	let boundary = new Rectangle(width / 2, height/2, width/2, height/2);
+	let qt = new QuadTree(boundary, 4);
+	for (let p of g_flock)
+		qt.insert(p);
+	qt.show();
 
 	for (let boid of g_flock)
 	{
