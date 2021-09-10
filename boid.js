@@ -273,4 +273,4 @@ class Boid
 
 }
 
-Boid.id = 0;	// static variable
+// Boid.id = 0;	// static variable
