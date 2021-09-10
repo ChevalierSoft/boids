@@ -1,3 +1,5 @@
+let max_cmp = 25;
+
 class Boid
 {
 	constructor(rw, rh)
@@ -7,7 +9,7 @@ class Boid
 		this.acceleration = createVector(2, -4);
 		this.maxForce = 0.41;
 		this.maxSpeed = 6.0;
-		this.maxSpeedSeparation = 7.0;
+		this.maxSpeedSeparation = 7.5;
 		this.perceptionRadius = 50;
 		this.fireRadius = 200;
 		this.size = 10;
@@ -28,11 +30,62 @@ class Boid
 			this.position.y = height;
 	}
 
+	_boiding(boids)
+	{
+		let aligning = createVector();
+		let cohesioning = createVector();
+		let separating = createVector();
+		let d = 0;
+		let total = 0;
+		let i = 0;
+
+		for (let other of boids)
+		{
+			d = dist(this.position.x, this.position.y, other.position.x, other.position.y);
+			if (other != this && d < this.perceptionRadius)
+			{
+				aligning.add(other.velocity);
+				cohesioning.add(other.position);
+				let diff = p5.Vector.sub(this.position, other.position);
+				diff.div(d);
+				separating.add(diff);
+				++total;
+			}
+			++i;
+			if (i >= max_cmp)
+				break ;
+		}
+		if (total > 0)
+		{
+			aligning.div(total);
+			aligning.setMag(this.maxSpeed);
+			aligning.sub(this.velocity);
+			aligning.limit(this.maxForce);
+
+			cohesioning.div(total);
+			cohesioning.sub(this.position);
+			cohesioning.setMag(this.maxSpeed);
+			cohesioning.sub(this.velocity);
+			cohesioning.limit(this.maxForce);
+
+			separating.div(total);
+			separating.setMag(this.maxSpeedSeparation);
+			separating.sub(this.velocity);
+			separating.limit(this.maxForce);
+
+			this.acceleration.add(aligning);
+			this.acceleration.add(cohesioning);
+			this.acceleration.add(separating);
+		}
+		return ;
+	}
+
 	align(boids)
 	{
 		let steering = createVector();
 		let d = 0;
 		let total = 0;
+		let i = 0;
 
 		for (let other of boids)
 		{
@@ -42,6 +95,9 @@ class Boid
 				steering.add(other.velocity);
 				++total;
 			}
+			++i;
+			if (i >= max_cmp)
+				break ;
 		}
 		if (total > 0)
 		{
@@ -58,6 +114,7 @@ class Boid
 		let d = 0;
 		let total = 0;
 		let steering = createVector();
+		let i = 0;
 
 		for (let other of boids)
 		{
@@ -68,6 +125,9 @@ class Boid
 				steering.add(other.position);
 				++total;
 			}
+			++i;
+			if (i >= max_cmp)
+				break ;
 		}
 		if (total > 0)
 		{
@@ -85,6 +145,7 @@ class Boid
 		let d = 0;
 		let total = 0;
 		let steering = createVector();
+		let i = 0;
 
 		for (let other of boids)
 		{
@@ -97,6 +158,9 @@ class Boid
 				steering.add(diff);
 				++total;
 			}
+			++i;
+			if (i >= max_cmp)
+				break ;
 		}
 		if (total > 0)
 		{
@@ -110,14 +174,15 @@ class Boid
 
 	flock(boids)
 	{
-		let alignement = this.align(boids);
-		let cohe = this.cohesion(boids);
-		let separation = this.separation(boids);
+		// let alignement = this.align(boids);
+		// let cohe = this.cohesion(boids);
+		// let separation = this.separation(boids);
 
-		this.acceleration.add(alignement);
-		this.acceleration.add(cohe);
-		this.acceleration.add(separation);
+		// this.acceleration.add(alignement);
+		// this.acceleration.add(cohe);
+		// this.acceleration.add(separation);
 
+		this._boiding(boids);
 	}
 
 	update()
