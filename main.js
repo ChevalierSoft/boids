@@ -5,7 +5,7 @@ let deb = 0;
 
 function setup()
 {
-	let nb_elem_at_startup = 1000;
+	let nb_elem_at_startup = 500;
 
 	createCanvas(950, 950);
 	for (let i = 0; i < nb_elem_at_startup; ++i)
