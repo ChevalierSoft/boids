@@ -1,2 +1,5 @@
 *.sw[ponm]
 vscode
+*.un~
+*.js~
+*~
