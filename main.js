@@ -5,9 +5,10 @@ let deb = 0;
 
 function setup()
 {
-	let nb_elem_at_startup = 400;
+	let nb_elem_at_startup = 150;
 
-	createCanvas(950, 950);
+	frameRate(60);
+	createCanvas(450, 950);
 	for (let i = 0; i < nb_elem_at_startup; ++i)
 		g_flock.push(new Boid(random(width), random(height)));
 	background(50, 50, 50);
